@@ -7,7 +7,7 @@ import "../global.css";
 export default function RootLayout() {
   const theme = {
     ...DarkTheme,
-    color: {
+    colors: {
       ...DarkTheme.colors,
       primary: "white",
     },

@@ -1,10 +1,19 @@
+import mediaList from "@/assets/data/mediaList.json";
 import React from "react";
-import { SafeAreaView, Text } from "react-native";
+import { FlatList, SafeAreaView, Text } from "react-native";
 
 const HomeScreen = () => {
   return (
     <SafeAreaView>
-      <Text className="text-red-500 text-5xl">HomeScreen</Text>
+      <FlatList
+        contentContainerClassName="flex flex-row items-center p-5 gap-4"
+        data={mediaList}
+        renderItem={({ item }) => (
+          <Text className="text-white font-bold text-sm p-2 border rounded-full border-white">
+            {item.title}
+          </Text>
+        )}
+      />
     </SafeAreaView>
   );
 };
