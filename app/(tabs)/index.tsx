@@ -6,7 +6,8 @@ const HomeScreen = () => {
   return (
     <SafeAreaView>
       <FlatList
-        showsVerticalScrollIndicator
+        horizontal
+        showsHorizontalScrollIndicator
         contentContainerClassName="flex flex-row items-center p-5 gap-4"
         data={mediaList}
         renderItem={({ item }) => (
