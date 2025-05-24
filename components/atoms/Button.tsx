@@ -1,12 +1,13 @@
 import clsx from "clsx";
-import React from "react";
+import React, { ReactNode } from "react";
 import { GestureResponderEvent, Text, TouchableOpacity } from "react-native";
 
 type ButtonVariant = "primary" | "secondary" | "tertiary" | "isWhite";
 type ButtonSize = "sm" | "md" | "lg";
 
 interface ButtonProps {
-  title: string;
+  label?: string; // optional now
+  children?: ReactNode; // to support wrapping any content
   onPress?: (event: GestureResponderEvent) => void;
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -17,7 +18,8 @@ interface ButtonProps {
 }
 
 const Button: React.FC<ButtonProps> = ({
-  title,
+  label,
+  children,
   onPress,
   variant = "primary",
   size = "md",
@@ -31,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
       case "primary":
         return "bg-primary-500";
       case "secondary":
-        return "bg-secondary-golden-500 ";
+        return "bg-secondary-golden-500";
       case "tertiary":
         return "bg-tertiary-yellow-500";
       case "isWhite":
@@ -78,7 +80,7 @@ const Button: React.FC<ButtonProps> = ({
     <TouchableOpacity
       onPress={onPress}
       className={clsx(
-        "rounded-xl items-center",
+        "rounded-xl items-center justify-center flex-row", // flex-row to allow icon+text side by side
         getButtonStyle(),
         getSizeStyle(),
         {
@@ -88,16 +90,20 @@ const Button: React.FC<ButtonProps> = ({
         className
       )}
     >
-      <Text
-        className={clsx(
-          "font-semibold",
-          getTextStyle(),
-          getTextSize(),
-          textClassName
-        )}
-      >
-        {title}
-      </Text>
+      {children ? (
+        children
+      ) : label ? (
+        <Text
+          className={clsx(
+            "font-semibold",
+            getTextStyle(),
+            getTextSize(),
+            textClassName
+          )}
+        >
+          {label}
+        </Text>
+      ) : null}
     </TouchableOpacity>
   );
 };
