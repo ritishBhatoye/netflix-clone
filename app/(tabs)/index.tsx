@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 
+import FeaturedMovie from "@/components/home/FeaturedMovie";
 import MediaListItem from "@/components/MediaListItem";
 import { FilterData } from "@/constants/home";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,6 +17,7 @@ import { Ionicons } from "@expo/vector-icons";
 const HomeScreen = () => {
   return (
     <SafeAreaView>
+      <FeaturedMovie movie={mediaList} />
       <View className="flex flex-row justify-between">
         <Text className="text-white font-bold text-2xl">For Ritish</Text>
 
