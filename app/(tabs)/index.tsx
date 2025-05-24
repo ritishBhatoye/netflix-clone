@@ -24,7 +24,7 @@ const HomeScreen = () => {
 
       {/* Filters */}
 
-      <View className="flex flex-row gap-10">
+      <View className="flex flex-row gap-10 mt-10">
         {FilterData.map((filter) => (
           <TouchableOpacity activeOpacity={0.5} key={filter.id} className="">
             <Text className="font-bold text-white text-sm rounded-full border-2 border-white p-1.5 px-5">
