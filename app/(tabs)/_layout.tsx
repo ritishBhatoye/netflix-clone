@@ -31,7 +31,7 @@ const TabLayout = () => {
           tabBarIcon: ({ color, focused }) => (
             <MaterialCommunityIcons
               name="play-box-multiple-outline"
-              size={28}
+              size={24}
               color={color}
             />
           ),
@@ -42,7 +42,7 @@ const TabLayout = () => {
         options={{
           title: "My Netflix",
           tabBarIcon: ({ color, focused }) => (
-            <MaterialIcons name="portrait" size={28} color={color} />
+            <MaterialIcons name="portrait" size={24} color={color} />
           ),
         }}
       />
