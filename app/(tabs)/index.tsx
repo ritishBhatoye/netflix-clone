@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import mediaList from "@/assets/data/mediaList.json";
 import {
+  ActivityIndicator,
   FlatList,
   SafeAreaView,
   Text,
@@ -9,15 +10,33 @@ import {
   View,
 } from "react-native";
 
+import EmptyState from "@/components/global/EmptyState";
 import FeaturedMovie from "@/components/home/FeaturedMovie";
 import MediaListItem from "@/components/MediaListItem";
 import { FilterData } from "@/constants/home";
+import { AppDispatch, RootState } from "@/store";
+import { fetchTrendingMovies } from "@/store/moviesSlice";
 import { Ionicons } from "@expo/vector-icons";
+import { useDispatch, useSelector } from "react-redux";
 
 const HomeScreen = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const { trending, loading, error } = useSelector(
+    (state: RootState) => state.movies
+  );
+
+  useEffect(() => {
+    dispatch(fetchTrendingMovies());
+  }, [dispatch]);
+
+  if (loading) return <ActivityIndicator size="large" color="#E50914" />;
+  if (error) return <EmptyState />;
+
+  const featuredMovie = trending[0];
+
   return (
     <SafeAreaView>
-      <FeaturedMovie movie={mediaList} />
+      {featuredMovie && <FeaturedMovie movie={featuredMovie} />}
       <View className="flex flex-row justify-between">
         <Text className="text-white font-bold text-2xl">For Ritish</Text>
 
