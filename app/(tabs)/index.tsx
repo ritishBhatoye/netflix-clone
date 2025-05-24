@@ -9,9 +9,9 @@ import {
   View,
 } from "react-native";
 
+import MediaListItem from "@/components/MediaListItem";
 import { FilterData } from "@/constants/home";
 import { Ionicons } from "@expo/vector-icons";
-import { Image } from "expo-image";
 
 const HomeScreen = () => {
   return (
@@ -44,11 +44,8 @@ const HomeScreen = () => {
               horizontal
               data={verticalListItem.data}
               renderItem={({ item: horizontalListItem }) => (
-                <View className="">
-                  <Image
-                    source={{ uri: horizontalListItem.image }}
-                    style={{ width: 110, aspectRatio: 3 / 4 }}
-                  />
+                <View className="px-2">
+                  <MediaListItem mediaItem={horizontalListItem} />
                 </View>
               )}
             />
