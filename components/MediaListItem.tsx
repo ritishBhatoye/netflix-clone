@@ -1,6 +1,7 @@
 import { Image } from "expo-image";
 import { Link } from "expo-router";
 import React from "react";
+import { TouchableOpacity } from "react-native";
 
 type MediaListItemProps = {
   mediaItem: MediaListData;
@@ -9,11 +10,13 @@ type MediaListItemProps = {
 const MediaListItem = ({ mediaItem }: MediaListItemProps) => {
   return (
     <Link href={`mediaDetail/${mediaItem.id}`} asChild>
-      <Image
-        contentFit="contain"
-        source={{ uri: mediaItem.image }}
-        style={{ width: 110, height: 160, borderRadius: 8 }}
-      />
+      <TouchableOpacity>
+        <Image
+          contentFit="cover"
+          source={{ uri: mediaItem.image }}
+          style={{ width: 110, height: 140, borderRadius: 5 }}
+        />
+      </TouchableOpacity>
     </Link>
   );
 };
