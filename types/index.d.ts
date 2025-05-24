@@ -38,3 +38,8 @@ type Media = {
   trailer: string;
   seasons: Season[];
 };
+
+type FilterType = {
+  id: number;
+  title: string;
+};
