@@ -9,7 +9,7 @@ import {
   View,
 } from "react-native";
 
-import { FilterData } from "@/constants/Home";
+import { FilterData } from "@/constants/home";
 import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 
