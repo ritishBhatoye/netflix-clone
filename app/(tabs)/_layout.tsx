@@ -10,7 +10,7 @@ const TabLayout = () => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: "#faaa10",
+        tabBarActiveTintColor: "#fff",
         headerShown: false,
         tabBarButton: HapticTab,
       }}
