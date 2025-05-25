@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
 
-import { SafeAreaView, Text } from "react-native";
+import { SafeAreaView } from "react-native";
 
 import mediaDetailList from "@/assets/data/mediaDetailedList.json";
 import MediaDetailScreen from "@/components/global/MediaDetailScreen";
@@ -23,7 +23,6 @@ const MovieDetail = () => {
 
   return (
     <SafeAreaView className="h-full">
-      <Text className="text-red-500">{id}</Text>
       <MediaDetailScreen
         title={title}
         thumbnail={thumbnail}
