@@ -4,6 +4,7 @@ import React from "react";
 import { SafeAreaView, Text } from "react-native";
 
 import mediaDetailList from "@/assets/data/mediaDetailedList.json";
+import MediaDetailScreen from "@/components/global/MediaDetailScreen";
 
 const MovieDetail = () => {
   const { id }: { id: string } = useLocalSearchParams();
@@ -13,7 +14,15 @@ const MovieDetail = () => {
   return (
     <SafeAreaView className="h-full">
       <Text className="text-red-500">{id}</Text>
-      <MediaDetailScreen />
+      <MediaDetailScreen
+        title={""}
+        thumbnail={""}
+        releaseYear={0}
+        ageRestriction={""}
+        duration={""}
+        description={""}
+        type={""}
+      />
     </SafeAreaView>
   );
 };

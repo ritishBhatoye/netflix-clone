@@ -45,7 +45,7 @@ const MediaDetailScreen = (props: MediaDetailProps) => {
           <Text className="text-sm font-normal p-2 px-4 bg-tertiary-400 text-tertiary-100">
             {ageRestriction}
           </Text>
-          <Text className="text-sm font-normal p-1 px-2 border-tertiary-100 border text-tertiary-100">
+          <Text className="text-sm font-normal p-0.5 px-2 border-tertiary-100 border text-tertiary-100">
             HD
           </Text>
           <Text className="text-sm font-normal text-tertiary-100">
@@ -59,7 +59,7 @@ const MediaDetailScreen = (props: MediaDetailProps) => {
           </Button>
           <Button variant="secondary">
             <Ionicons name="download" size={24} color={"white"} />
-            <Text className="text-lg text-black font-semibold">Download</Text>
+            <Text className="text-lg text-white font-semibold">Download</Text>
           </Button>
         </View>
         <Text className="text-sm font-medium text-tertiary-100">

@@ -37,7 +37,7 @@ const Button: React.FC<ButtonProps> = ({
       case "tertiary":
         return "bg-tertiary-400";
       case "isWhite":
-        return "bg-white border-primary-500 border";
+        return "bg-white border-white border";
       default:
         return "bg-primary-400";
     }

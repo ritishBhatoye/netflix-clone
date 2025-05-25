@@ -5,7 +5,7 @@ const HomeLayout = () => {
   return (
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="index" />
-      <Stack.Screen name="mediaDetail" />
+      <Stack.Screen name="media-detail" />
     </Stack>
   );
 };
