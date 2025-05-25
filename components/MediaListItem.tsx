@@ -9,7 +9,7 @@ type MediaListItemProps = {
 
 const MediaListItem = ({ mediaItem }: MediaListItemProps) => {
   return (
-    <Link href={`mediaDetail/${mediaItem.id}`} asChild>
+    <Link href={`/(tabs)/home/media-detail/${mediaItem.id}`} asChild>
       <TouchableOpacity>
         <Image
           contentFit="cover"
