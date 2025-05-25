@@ -52,7 +52,7 @@ const MediaDetailScreen = (props: MediaDetailType) => {
             <Text className="text-lg text-white font-semibold">Download</Text>
           </Button>
         </View>
-        <Text className="text-sm font-medium text-tertiary-100">
+        <Text className="text-lg font-medium text-tertiary-100">
           {description}
         </Text>
       </ScrollView>
