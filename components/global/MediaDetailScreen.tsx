@@ -22,7 +22,7 @@ const MediaDetailScreen = (props: MediaDetailType) => {
       <Image
         contentFit="contain"
         source={{ uri: thumbnail }}
-        style={{ height: "40%", width: "100%" }}
+        style={{ height: "50%", width: "100%" }}
       />
       <ScrollView>
         <Text className="text-base text-white font-bold text-start">
