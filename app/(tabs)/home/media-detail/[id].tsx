@@ -11,17 +11,27 @@ const MovieDetail = () => {
 
   const mediaItem = mediaDetailList.find((media) => media.id === id);
 
+  const {
+    title,
+    thumbnail,
+    releaseYear,
+    ageRestriction,
+    duration,
+    description,
+    type,
+  }: any = mediaItem;
+
   return (
     <SafeAreaView className="h-full">
       <Text className="text-red-500">{id}</Text>
       <MediaDetailScreen
-        title={""}
-        thumbnail={""}
-        releaseYear={0}
-        ageRestriction={""}
-        duration={""}
-        description={""}
-        type={""}
+        title={title}
+        thumbnail={thumbnail}
+        releaseYear={releaseYear}
+        ageRestriction={ageRestriction}
+        duration={duration}
+        description={description}
+        type={type}
       />
     </SafeAreaView>
   );

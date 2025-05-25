@@ -6,17 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Image } from "expo-image";
 import Button from "../atoms/Button";
 
-type MediaDetailProps = {
-  title: string;
-  thumbnail: string;
-  releaseYear: number;
-  ageRestriction: string;
-  duration: string;
-  description: string;
-  type: string;
-};
-
-const MediaDetailScreen = (props: MediaDetailProps) => {
+const MediaDetailScreen = (props: MediaDetailType) => {
   const {
     title,
     thumbnail,
@@ -30,9 +20,9 @@ const MediaDetailScreen = (props: MediaDetailProps) => {
   return (
     <View className="">
       <Image
-        contentFit="cover"
+        contentFit="contain"
         source={{ uri: thumbnail }}
-        style={{ height: "40%" }}
+        style={{ height: "40%", width: "100%" }}
       />
       <ScrollView>
         <Text className="text-base text-white font-bold text-start">

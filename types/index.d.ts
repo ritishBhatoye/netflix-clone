@@ -43,3 +43,13 @@ type FilterType = {
   id: number;
   title: string;
 };
+
+type MediaDetailType = {
+  title: string;
+  thumbnail: string;
+  releaseYear: number;
+  ageRestriction: string;
+  duration: string;
+  description: string;
+  type: string;
+};
