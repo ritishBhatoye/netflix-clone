@@ -18,6 +18,12 @@ export default function LoginScreen() {
       <Button label={"Sign In"} variant={"primary"} />
 
       <Text className="text-white/50 text-center font-light py-4">OR</Text>
+      <Button label={"Use a Sign-In Code"} variant={"primary"} />
+      <Text className="text-tertiary-200 text-sm">Forgot Password?</Text>
+      <Text className="text-tertiary-200 text-sm flex-row">
+        Sign in is protected by Google reCAPTCHA to ensure you are not a bot.
+        <Text className="font-semibold">Learn More</Text>
+      </Text>
     </View>
   );
 }
