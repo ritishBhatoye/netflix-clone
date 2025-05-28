@@ -1,10 +1,12 @@
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import clsx from "clsx";
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   ColorSchemeName,
   Text,
   TextInput,
   TextInputProps,
+  TouchableOpacity,
   useColorScheme,
   View,
 } from "react-native";
@@ -14,25 +16,29 @@ type InputWidth = "full" | "half";
 type InputVariant = "box" | "outline";
 
 interface InputWithLabelProps extends TextInputProps {
-  label?: string;
+  label: string;
   size?: InputSize;
   width?: InputWidth;
   variant?: InputVariant;
+  isPassword?: boolean;
+  onValueChange?: (value: string) => void;
 }
 
-const InputWithLabel: React.FC<InputWithLabelProps> = ({
+const Input: React.FC<InputWithLabelProps> = ({
   label,
   value,
-  onChangeText,
+  onValueChange,
   placeholder,
-  secureTextEntry = false,
   size = "md",
   width = "full",
   variant = "box",
+  isPassword = false,
   ...rest
 }) => {
   const colorScheme: ColorSchemeName = useColorScheme();
   const isDarkMode: boolean = colorScheme === "dark";
+
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const sizeStyles = {
     sm: "text-sm p-2",
@@ -50,6 +56,19 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
     outline: "bg-transparent border-b border-gray-400",
   };
 
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(!passwordVisible);
+  };
+
+  const handleTextChange = useCallback(
+    (text: string) => {
+      if (onValueChange) {
+        onValueChange(text);
+      }
+    },
+    [onValueChange]
+  );
+
   return (
     <View className={clsx("mb-4", widthStyles[width])}>
       {/* Label */}
@@ -63,20 +82,33 @@ const InputWithLabel: React.FC<InputWithLabelProps> = ({
       </Text>
 
       <View
-        className={clsx("rounded-lg", variantStyles[variant], sizeStyles[size])}
+        className={clsx(
+          "rounded-lg flex-row items-center",
+          variantStyles[variant],
+          sizeStyles[size]
+        )}
       >
         <TextInput
-          className={clsx("text-swiggy-text w-full", sizeStyles[size])}
+          className={clsx("flex-1 text-swiggy-text", sizeStyles[size])}
           value={value}
-          onChangeText={onChangeText}
+          onChangeText={handleTextChange}
           placeholder={placeholder}
-          secureTextEntry={secureTextEntry}
+          secureTextEntry={isPassword && !passwordVisible}
           placeholderTextColor={isDarkMode ? "#CCCCCC" : "#333333"}
           {...rest}
         />
+        {isPassword && (
+          <TouchableOpacity onPress={togglePasswordVisibility}>
+            <MaterialCommunityIcons
+              name={passwordVisible ? "eye-off" : "eye"}
+              size={24}
+              color={isDarkMode ? "#FFFFFF" : "#000000"}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
 };
 
-export default InputWithLabel;
+export default Input;
