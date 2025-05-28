@@ -16,7 +16,7 @@ type InputWidth = "full" | "half";
 type InputVariant = "box" | "outline";
 
 interface InputWithLabelProps extends TextInputProps {
-  label: string;
+  label?: string;
   size?: InputSize;
   width?: InputWidth;
   variant?: InputVariant;
