@@ -5,7 +5,7 @@ import Input from "@/components/atoms/Input";
 
 export default function LoginScreen() {
   return (
-    <View className="h-full">
+    <View className="h-full justify-center items-center">
       <Input label={""} placeholder={"Email or phone number"} />
       <Input
         // label="Password"
