@@ -2,14 +2,14 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import clsx from "clsx";
 import React, { useCallback, useState } from "react";
 import {
-  ColorSchemeName,
   Text,
   TextInput,
   TextInputProps,
   TouchableOpacity,
-  useColorScheme,
   View,
+  useColorScheme,
 } from "react-native";
+import { tv } from "tailwind-variants";
 
 type InputSize = "sm" | "md" | "lg";
 type InputWidth = "full" | "half";
@@ -22,8 +22,34 @@ interface InputWithLabelProps extends TextInputProps {
   variant?: InputVariant;
   isPassword?: boolean;
   onValueChange?: (value: string) => void;
+  className?: string;
   inputClassName?: string;
+  labelClassName?: string;
 }
+
+const inputStyles = tv({
+  base: "rounded-lg flex-row items-center",
+  variants: {
+    variant: {
+      box: "bg-swiggy-accent-light border-2 border-swiggy-primary",
+      outline: "bg-transparent border-b border-gray-400",
+    },
+    size: {
+      sm: "text-sm p-2",
+      md: "text-base p-3",
+      lg: "text-lg p-4",
+    },
+    width: {
+      full: "w-full",
+      half: "w-1/2",
+    },
+  },
+  defaultVariants: {
+    variant: "box",
+    size: "md",
+    width: "full",
+  },
+});
 
 const Input: React.FC<InputWithLabelProps> = ({
   label,
@@ -34,29 +60,15 @@ const Input: React.FC<InputWithLabelProps> = ({
   width = "full",
   variant = "box",
   isPassword = false,
+  className,
   inputClassName,
+  labelClassName,
   ...rest
 }) => {
-  const colorScheme: ColorSchemeName = useColorScheme();
-  const isDarkMode: boolean = colorScheme === "dark";
+  const colorScheme = useColorScheme();
+  const isDarkMode = colorScheme === "dark";
 
   const [passwordVisible, setPasswordVisible] = useState(false);
-
-  const sizeStyles = {
-    sm: "text-sm p-2",
-    md: "text-base p-3",
-    lg: "text-lg p-4",
-  };
-
-  const widthStyles = {
-    full: "w-full",
-    half: "w-1/2",
-  };
-
-  const variantStyles = {
-    box: "bg-swiggy-accent-light border-2 border-swiggy-primary",
-    outline: "bg-transparent border-b border-gray-400",
-  };
 
   const togglePasswordVisibility = () => {
     setPasswordVisible(!passwordVisible);
@@ -72,30 +84,21 @@ const Input: React.FC<InputWithLabelProps> = ({
   );
 
   return (
-    <View className={clsx("mb-4", widthStyles[width])}>
-      {/* Label */}
-      <Text
-        className={clsx(
-          "font-semibold mb-1",
-          isDarkMode ? "text-white" : "text-primary-500"
-        )}
-      >
-        {label}
-      </Text>
-
-      <View
-        className={clsx(
-          "rounded-lg flex-row items-center",
-          variantStyles[variant],
-          sizeStyles[size]
-        )}
-      >
-        <TextInput
+    <View className={clsx("mb-4", inputStyles({ width }), className)}>
+      {label && (
+        <Text
           className={clsx(
-            "flex-1 text-swiggy-text",
-            `${inputClassName}`,
-            sizeStyles[size]
+            "font-semibold mb-1",
+            isDarkMode ? "text-white" : "text-primary-500",
+            labelClassName
           )}
+        >
+          {label}
+        </Text>
+      )}
+      <View className={inputStyles({ variant, size })}>
+        <TextInput
+          className={clsx("flex-1 text-swiggy-text", inputClassName)}
           value={value}
           onChangeText={handleTextChange}
           placeholder={placeholder}
