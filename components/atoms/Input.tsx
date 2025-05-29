@@ -31,7 +31,7 @@ const inputStyles = tv({
   base: "rounded-lg flex-row items-center",
   variants: {
     variant: {
-      box: "bg-swiggy-accent-light border-2 border-swiggy-primary",
+      box: "bg-swiggy-accent-light border-2 border-primary-500",
       outline: "bg-transparent border-b border-gray-400",
     },
     size: {
