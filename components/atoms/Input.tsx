@@ -84,7 +84,7 @@ const Input: React.FC<InputWithLabelProps> = ({
   );
 
   return (
-    <View className={`my-5 ${className}`}>
+    <View className={`my-3 ${className}`}>
       {label && (
         <Text
           className={clsx(
