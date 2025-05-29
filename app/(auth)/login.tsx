@@ -1,5 +1,10 @@
-import { View } from "react-native";
+import LoginScreen from "@/screens/Login";
+import { SafeAreaView } from "react-native";
 
 export default function Login() {
-  return <View className="h-full"></View>;
+  return (
+    <SafeAreaView>
+      <LoginScreen />
+    </SafeAreaView>
+  );
 }
