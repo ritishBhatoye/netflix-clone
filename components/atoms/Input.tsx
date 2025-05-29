@@ -22,6 +22,7 @@ interface InputWithLabelProps extends TextInputProps {
   variant?: InputVariant;
   isPassword?: boolean;
   onValueChange?: (value: string) => void;
+  inputClassName?: string;
 }
 
 const Input: React.FC<InputWithLabelProps> = ({
@@ -33,6 +34,7 @@ const Input: React.FC<InputWithLabelProps> = ({
   width = "full",
   variant = "box",
   isPassword = false,
+  inputClassName,
   ...rest
 }) => {
   const colorScheme: ColorSchemeName = useColorScheme();
@@ -89,7 +91,11 @@ const Input: React.FC<InputWithLabelProps> = ({
         )}
       >
         <TextInput
-          className={clsx("flex-1 text-swiggy-text", sizeStyles[size])}
+          className={clsx(
+            "flex-1 text-swiggy-text",
+            `${inputClassName}`,
+            sizeStyles[size]
+          )}
           value={value}
           onChangeText={handleTextChange}
           placeholder={placeholder}
