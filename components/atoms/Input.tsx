@@ -31,7 +31,7 @@ const inputStyles = tv({
   base: "rounded-lg flex-row items-center",
   variants: {
     variant: {
-      box: "bg-swiggy-accent-light border-2 border-primary-500",
+      box: "bg-swiggy-accent-light border-2 border-white/50",
       outline: "bg-transparent border-b border-gray-400",
     },
     size: {
@@ -84,12 +84,12 @@ const Input: React.FC<InputWithLabelProps> = ({
   );
 
   return (
-    <View className={`my-3 ${className}`}>
+    <View className={`py-3 ${className}`}>
       {label && (
         <Text
           className={clsx(
             "font-semibold mb-1",
-            isDarkMode ? "text-white" : "text-primary-500",
+            isDarkMode ? "text-white" : "text-black/80",
             labelClassName
           )}
         >
@@ -98,7 +98,7 @@ const Input: React.FC<InputWithLabelProps> = ({
       )}
       <View className={inputStyles({ variant, size })}>
         <TextInput
-          className={clsx("flex-1 text-swiggy-text", inputClassName)}
+          className={clsx("flex-1 py-1 text-swiggy-text", inputClassName)}
           value={value}
           onChangeText={handleTextChange}
           placeholder={placeholder}
@@ -110,8 +110,8 @@ const Input: React.FC<InputWithLabelProps> = ({
           <TouchableOpacity onPress={togglePasswordVisibility}>
             <MaterialCommunityIcons
               name={passwordVisible ? "eye-off" : "eye"}
-              size={24}
-              color={isDarkMode ? "#FFFFFF" : "#000000"}
+              size={20}
+              color={isDarkMode ? "#FFFFFF" : "#CCCCCC"}
             />
           </TouchableOpacity>
         )}

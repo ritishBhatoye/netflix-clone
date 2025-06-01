@@ -5,24 +5,27 @@ import Input from "@/components/atoms/Input";
 
 export default function LoginScreen() {
   return (
-    <View className="h-full justify-center items-center bg-tertiary-400/60">
+    <View className="h-full justify-center items-center gap-2 w-11/12 mx-auto">
       <Input
-        label={""}
         placeholder={"Email or phone number"}
         // className="border-red-500"
       />
       <Input
-        // label="Password"
         placeholder="Password"
         // value={password}
         // onChange={setPassword}
         isPassword={true}
       />
 
-      <Button label={"Sign In"} variant={"primary"} />
+      <Button
+        label={"Sign In"}
+        variant={"primary"}
+        halfWidth
+        className="mt-5"
+      />
 
       <Text className="text-white/50 text-center font-light py-4">OR</Text>
-      <Button label={"Use a Sign-In Code"} variant={"primary"} />
+      <Button label={"Use a Sign-In Code"} variant={"primary"} size={"sm"} />
       <Text className="text-tertiary-200 text-sm">Forgot Password?</Text>
       <Text className="text-tertiary-200 text-sm flex-row text-center py-5">
         Sign in is protected by Google reCAPTCHA to ensure you are not a bot.
