@@ -8,7 +8,7 @@ export default function LoginScreen() {
     <View className="h-full justify-center items-center gap-2 w-11/12 mx-auto">
       <Input
         placeholder={"Email or phone number"}
-        // className="border-red-500"
+        inputClassName="bg-tertiary-400/60"
       />
       <Input
         placeholder="Password"
