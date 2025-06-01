@@ -80,7 +80,7 @@ const Button: React.FC<ButtonProps> = ({
     <TouchableOpacity
       onPress={onPress}
       className={clsx(
-        "rounded-xl items-center justify-center flex-row", // flex-row to allow icon+text side by side
+        "rounded-md items-center justify-center flex-row", // flex-row to allow icon+text side by side
         getButtonStyle(),
         getSizeStyle(),
         {
