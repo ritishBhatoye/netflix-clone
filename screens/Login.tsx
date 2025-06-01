@@ -9,6 +9,7 @@ export default function LoginScreen() {
       <Input
         placeholder={"Email or phone number"}
         inputClassName="bg-tertiary-400/60"
+        variant={"borderless"}
       />
       <Input
         placeholder="Password"

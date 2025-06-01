@@ -13,7 +13,7 @@ import { tv } from "tailwind-variants";
 
 type InputSize = "sm" | "md" | "lg";
 type InputWidth = "full" | "half";
-type InputVariant = "box" | "outline";
+type InputVariant = "borderless" | "box" | "outline";
 
 interface InputWithLabelProps extends TextInputProps {
   label?: string;
@@ -31,7 +31,7 @@ const inputStyles = tv({
   base: "rounded-lg flex-row items-center",
   variants: {
     variant: {
-      borderNone: "bg-swiggy-accent-light border border-white/50",
+      borderless: "bg-swiggy-accent-light border border-white/50",
       box: "bg-swiggy-accent-light border-2 border-white/50",
       outline: "bg-transparent border-b border-gray-400",
     },
@@ -97,9 +97,9 @@ const Input: React.FC<InputWithLabelProps> = ({
           {label}
         </Text>
       )}
-      <View className={inputStyles({ variant, size })}>
+      <View className={clsx(inputStyles({ variant, size }), inputClassName)}>
         <TextInput
-          className={clsx("flex-1 py-1 text-swiggy-text", inputClassName)}
+          className={clsx("flex-1 py-1 text-swiggy-text")}
           value={value}
           onChangeText={handleTextChange}
           placeholder={placeholder}
