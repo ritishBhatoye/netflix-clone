@@ -2,8 +2,10 @@ import { Text, View } from "react-native";
 
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
+import { Router, useRouter } from "expo-router";
 
 export default function LoginScreen() {
+  const router: Router = useRouter();
   return (
     <View className="h-full justify-center items-center gap-2 w-11/12 mx-auto">
       <Input
@@ -19,6 +21,7 @@ export default function LoginScreen() {
       />
 
       <Button
+        onPress={() => router.push("/(tabs)/home")}
         label={"Sign In"}
         variant={"primary"}
         halfWidth
