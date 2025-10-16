@@ -1,10 +1,7 @@
-import { useEffect } from "react";
-
 import mediaList from "@/assets/data/mediaList.json";
 import {
   ActivityIndicator,
   FlatList,
-  SafeAreaView,
   ScrollView,
   Text,
   View,
@@ -14,20 +11,16 @@ import EmptyState from "@/components/global/EmptyState";
 import FeaturedMovie from "@/components/home/FeaturedMovie";
 import MediaListItem from "@/components/MediaListItem";
 
-import { AppDispatch, RootState } from "@/store";
-import { fetchTrendingMovies } from "@/store/moviesSlice";
+import { useGetTrendingMoviesQuery } from "@/services/moviesApi";
 import { Ionicons } from "@expo/vector-icons";
-import { useDispatch, useSelector } from "react-redux";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { trending, loading, error } = useSelector(
-    (state: RootState) => state.movies
-  );
-
-  useEffect(() => {
-    dispatch(fetchTrendingMovies());
-  }, [dispatch]);
+  const {
+    data: trending = [],
+    isLoading: loading,
+    error,
+  } = useGetTrendingMoviesQuery();
 
   if (loading)
     return (
