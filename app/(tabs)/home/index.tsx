@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import mediaList from "@/assets/data/mediaList.json";
 import {
@@ -7,14 +7,13 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 
 import EmptyState from "@/components/global/EmptyState";
 import FeaturedMovie from "@/components/home/FeaturedMovie";
 import MediaListItem from "@/components/MediaListItem";
-import { FilterData } from "@/constants/home";
+
 import { AppDispatch, RootState } from "@/store";
 import { fetchTrendingMovies } from "@/store/moviesSlice";
 import { Ionicons } from "@expo/vector-icons";
@@ -52,15 +51,6 @@ const HomeScreen = () => {
 
         {/* Filters */}
 
-        <View className="flex flex-row gap-10 mt-10">
-          {FilterData.map((filter) => (
-            <TouchableOpacity activeOpacity={0.5} key={filter.id} className="">
-              <Text className="font-bold text-white text-sm rounded-full border-2 border-white p-1.5 px-5">
-                {filter.title}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
         <FlatList
           data={mediaList}
           renderItem={({ item: verticalListItem }) => (
