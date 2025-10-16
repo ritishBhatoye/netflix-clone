@@ -1,17 +1,64 @@
-import { HapticTab } from "@/components/HapticTab";
-import {
-  Foundation,
-  MaterialCommunityIcons,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import GlassTabBarBackground from "@/components/atoms/GlassTabBarBackground";
+import { ICONS } from "@/constants/icons";
+import { Ionicons } from "@expo/vector-icons";
+import cn from "clsx";
 import { Tabs } from "expo-router";
 import React from "react";
+import { Text, View } from "react-native";
+
+interface TabBarIconProps {
+  focused: boolean;
+  iconName?: string;
+  title: string;
+  icon?: any;
+}
+
+const TabBarIcon = ({ focused, iconName, title, icon }: TabBarIconProps) => (
+  <View className="mt-12 flex min-h-full min-w-20 items-center justify-center gap-1">
+    {iconName ? (
+      <Ionicons
+        name={iconName as any}
+        size={28}
+        color={focused ? "#ffffff" : "#4B5563"}
+      />
+    ) : (
+      icon
+    )}
+    <Text
+      className={cn(
+        "text-sm font-semibold",
+        focused ? "text-white" : "text-gray-600"
+      )}
+    >
+      {title}
+    </Text>
+  </View>
+);
+
 const TabLayout = () => {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarButton: HapticTab,
+        tabBarShowLabel: false,
+
+        // Glass Effect
+        tabBarBackground: () => <GlassTabBarBackground />,
+
+        // Floating rounded style
+        tabBarStyle: {
+          position: "absolute",
+          bottom: 40,
+          marginHorizontal: 20,
+          height: 80,
+          borderRadius: 50,
+          backgroundColor: "transparent", // must be transparent for blur to work
+          overflow: "hidden", // ensures rounded corners
+          shadowColor: "#000",
+          shadowOpacity: 0.1,
+          shadowRadius: 10,
+          elevation: 5,
+        },
       }}
     >
       <Tabs.Screen
@@ -19,7 +66,7 @@ const TabLayout = () => {
         options={{
           title: "Home",
           tabBarIcon: ({ color, focused }) => (
-            <Foundation name="home" size={24} color={color} />
+            <TabBarIcon title="Home" iconName={ICONS.home} focused={focused} />
           ),
         }}
       />
@@ -29,10 +76,10 @@ const TabLayout = () => {
         options={{
           title: "New & Hot",
           tabBarIcon: ({ color, focused }) => (
-            <MaterialCommunityIcons
-              name="play-box-multiple-outline"
-              size={24}
-              color={color}
+            <TabBarIcon
+              title="New & Hot"
+              iconName={ICONS.newandhot}
+              focused={focused}
             />
           ),
         }}
@@ -41,8 +88,12 @@ const TabLayout = () => {
         name="setting"
         options={{
           title: "My Netflix",
-          tabBarIcon: ({ color, focused }) => (
-            <MaterialIcons name="portrait" size={24} color={color} />
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon
+              title="My Netflix"
+              iconName={ICONS.netflix}
+              focused={focused}
+            />
           ),
         }}
       />
