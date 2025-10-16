@@ -53,3 +53,12 @@ type MediaDetailType = {
   description: string;
   type: string;
 };
+//API integration
+interface FeaturedMovieProps {
+  id: number;
+  title: string;
+  poster_path: string;
+  overview: string;
+  release_date: string;
+  media_type: string;
+}

@@ -4,15 +4,11 @@ import React from "react";
 import { Text, View } from "react-native";
 import Button from "../atoms/Button";
 
-type FeatureMovieProps = {
-  movie: {
-    title: string;
-    poster_path: string;
-    media_type: string;
-  };
-};
+interface Props {
+  movie: FeaturedMovieProps;
+}
 
-const FeaturedMovie = ({ movie }: FeatureMovieProps) => {
+const FeaturedMovie = ({ movie }: Props) => {
   const imageUri = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
 
   return (
