@@ -31,7 +31,8 @@ const HomeScreen = () => {
   if (error) return <EmptyState />;
 
   const featuredMovie = trending[0];
-
+  console.log(trending[0]);
+  // console.log("Trending :- ", JSON.stringify(trending, null, 2));
   return (
     <SafeAreaView>
       <ScrollView>

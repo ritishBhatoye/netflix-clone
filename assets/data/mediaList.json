@@ -4,7 +4,7 @@
     "data": [
       {
         "id": "media-1",
-        "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/netflix/movie10.jpg",
+        "image": "htts://notjustdev-dummy.s3.us-east-2.amazonaws.com/netflix/movie10.jpg",
         "type": "MOVIE"
       },
       {
@@ -75,7 +75,7 @@
       {
         "id": "media-13",
         "image": "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/netflix/movie8.jpg",
-         "type": "TV_SERIES"
+        "type": "TV_SERIES"
       },
       {
         "id": "media-14",
