@@ -33,23 +33,27 @@ const TabBarIcon = ({ focused, iconName, title, icon }: TabBarIconProps) => {
             overflow: "hidden",
           }}
         >
-          <View className="items-center justify-center gap-1">
+          <View className="items-center justify-center gap-1 w-full">
             {iconName ? (
               <Ionicons name={iconName as any} size={24} color="#ffffff" />
             ) : (
               icon
             )}
-            <Text className="text-sm font-semibold text-white">{title}</Text>
+            <Text className="text-[10px] font-semibold text-center text-white">
+              {title}
+            </Text>
           </View>
         </BlurView>
       ) : (
-        <View className="items-center justify-center gap-1">
+        <View className="items-center justify-center w-full gap-1">
           {iconName ? (
             <Ionicons name={iconName as any} size={24} color="#4B5563" />
           ) : (
             icon
           )}
-          <Text className="text-sm font-semibold text-gray-600">{title}</Text>
+          <Text className="text-[10px] text-center font-semibold text-gray-600">
+            {title}
+          </Text>
         </View>
       )}
     </View>
