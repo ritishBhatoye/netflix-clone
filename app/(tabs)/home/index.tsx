@@ -12,7 +12,8 @@ import FeaturedMovie from "@/components/home/FeaturedMovie";
 import MediaListItem from "@/components/MediaListItem";
 
 import { useGetTrendingMoviesQuery } from "@/services/moviesApi";
-import { Ionicons } from "@expo/vector-icons";
+
+import HomeAppBar from "@/components/global/HomeAppBar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
@@ -36,11 +37,8 @@ const HomeScreen = () => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <View className="flex flex-row justify-between">
-          <Text className="text-white font-bold text-2xl">For Ritish</Text>
+        <HomeAppBar />
 
-          <Ionicons name="search" color={"#ffffff"} size={24} />
-        </View>
         {featuredMovie && <FeaturedMovie movie={featuredMovie} />}
 
         {/* Filters */}
