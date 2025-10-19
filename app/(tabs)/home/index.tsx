@@ -1,70 +1,44 @@
-import mediaList from "@/assets/data/mediaList.json";
-import {
-  ActivityIndicator,
-  FlatList,
-  ScrollView,
-  Text,
-  View,
-} from "react-native";
+import { ScrollView, Text } from 'react-native';
 
-import EmptyState from "@/components/global/EmptyState";
-import FeaturedMovie from "@/components/home/FeaturedMovie";
-import MediaListItem from "@/components/MediaListItem";
+import HeroBanner from '@/components/home/HeroBanner';
+import MediaRow from '@/components/home/MediaRow';
+import { useHomeContent } from '@/hooks/useHomeContent';
+import { getRandomGradient } from '@/utils/gradientColors';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect, useState } from 'react';
 
-import { useGetTrendingMoviesQuery } from "@/services/moviesApi";
+export default function HomeScreen() {
+  const { featured, top10, onlyOnNetflix, popular, genres, isLoading } = useHomeContent();
+  const [gradientColors, setGradientColors] = useState(getRandomGradient());
+  // Change gradient when movie changes or every hour
+  useEffect(() => {
+    setGradientColors(getRandomGradient());
+    
+    // Change gradient every hour (3600000 ms)
+    const interval = setInterval(() => {
+      setGradientColors(getRandomGradient());
+    }, 3600000);
 
-import HomeAppBar from "@/components/global/HomeAppBar";
-import { SafeAreaView } from "react-native-safe-area-context";
+    return () => clearInterval(interval);
+  }, [featured?.data?.[0]]);
+  if (isLoading) return <Text>Loading...</Text>;
 
-const HomeScreen = () => {
-  const {
-    data: trending = [],
-    isLoading: loading,
-    error,
-  } = useGetTrendingMoviesQuery();
-
-  if (loading)
-    return (
-      <SafeAreaView>
-        <ActivityIndicator size="large" color="#E50914" />
-      </SafeAreaView>
-    );
-  if (error) return <EmptyState />;
-
-  const featuredMovie = trending[0];
-  // console.log("TRENDING  :- ", trending[0]);
-  // console.log("Trending :- ", JSON.stringify(trending, null, 2));
   return (
-    <SafeAreaView>
-      <ScrollView>
-        <HomeAppBar />
+    <LinearGradient
+         colors={gradientColors}
+      start={{ x: 0, y: 1.2 }}  // starts lower (20% from top)
+  end={{ x: 0, y: 1 }}      // ends at bottom
+  locations={[0, 0.3, 0.6, 1]}
+       >
+    <ScrollView>
 
-        {featuredMovie && <FeaturedMovie movie={featuredMovie} />}
-
-        {/* Filters */}
-
-        <FlatList
-          data={mediaList}
-          renderItem={({ item: verticalListItem }) => (
-            <View>
-              <Text className="text-white font-bold text-sm py-6">
-                {verticalListItem.title}
-              </Text>
-              <FlatList
-                horizontal
-                data={verticalListItem.data}
-                renderItem={({ item: horizontalListItem }) => (
-                  <View className="px-2">
-                    <MediaListItem mediaItem={horizontalListItem} />
-                  </View>
-                )}
-              />
-            </View>
-          )}
-        />
-      </ScrollView>
-    </SafeAreaView>
+      <HeroBanner movie={featured.data?.[0]} />
+      <MediaRow title="Top 10 Today" data={top10.movies} />
+      <MediaRow title="Only on Netflix" data={onlyOnNetflix.movies} />
+      <MediaRow title="Popular" data={popular.data} />
+      <MediaRow title="Action" data={genres.action} />
+      <MediaRow title="Comedy" data={genres.comedy} />
+    </ScrollView>
+    </LinearGradient>
   );
-};
-
-export default HomeScreen;
+}
