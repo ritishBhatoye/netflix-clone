@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { BlurView } from "expo-blur";
 import { Tabs } from "expo-router";
 import React from "react";
-import { Text, View } from "react-native";
+import { Animated, Text, View } from "react-native";
 
 interface TabBarIconProps {
   focused: boolean;
@@ -14,48 +14,82 @@ interface TabBarIconProps {
 }
 
 const TabBarIcon = ({ focused, iconName, title, icon }: TabBarIconProps) => {
+  const scaleAnim = React.useRef(new Animated.Value(focused ? 1 : 0.9)).current;
+  const opacityAnim = React.useRef(new Animated.Value(focused ? 1 : 0.6)).current;
+  const blurOpacityAnim = React.useRef(new Animated.Value(focused ? 1 : 0)).current;
+
+  React.useEffect(() => {
+    Animated.parallel([
+      Animated.spring(scaleAnim, {
+        toValue: focused ? 1 : 0.9,
+        useNativeDriver: true,
+        friction: 8,
+        tension: 100,
+      }),
+      Animated.timing(opacityAnim, {
+        toValue: focused ? 1 : 0.6,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+      Animated.timing(blurOpacityAnim, {
+        toValue: focused ? 1 : 0,
+        duration: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [focused]);
+
   return (
     <View className="mt-12 flex min-h-full min-w-40 items-center justify-center">
-      {focused ? (
-        <BlurView
-          intensity={55} // ⬆️ increased blur intensity for thicker background feel
-          tint="systemThickMaterialDark" // deeper system tint
-          className="h-20 w-20 p-2"
-          style={{
-            borderRadius: 35,
-            backgroundColor: "rgba(229, 9, 20, 0.5)", // ⬆️ stronger red tint
-            // borderWidth: 1.5,
-            // borderColor: "rgba(229, 9, 20, 0.5)", // subtle border glow
-            shadowColor: "#E50914",
-            shadowOpacity: 0.4,
-            shadowRadius: 40,
-            shadowOffset: { width: 0, height: 3 },
-            overflow: "hidden",
-          }}
-        >
-          <View className="items-center justify-center gap-1 w-full">
+      <Animated.View
+        style={{
+          transform: [{ scale: scaleAnim }],
+          opacity: opacityAnim,
+        }}
+      >
+        {focused ? (
+          <Animated.View style={{ opacity: blurOpacityAnim }}>
+            <BlurView
+              intensity={10} // ⬆️ thicker glass effect
+              tint="systemThickMaterialDark"
+              className="h-[60px] w-[60px] p-2"
+              style={{
+                borderRadius: 35,
+                backgroundColor: "rgba(229, 9, 20, 0.65)", // ⬆️ stronger red tint for thicker glass
+                borderWidth: 0,
+                borderColor: "rgba(229, 9, 20, 0.7)", // ⬆️ more prominent border
+                shadowColor: "#E50914",
+                shadowOpacity: 0.6,
+                shadowRadius: 50,
+                shadowOffset: { width: 0, height: 4 },
+                overflow: "hidden",
+              }}
+            >
+              <View className="items-center justify-center gap-1 w-full">
+                {iconName ? (
+                  <Ionicons name={iconName as any} size={24} color="#ffffff" />
+                ) : (
+                  icon
+                )}
+                <Text className="text-[8px] w-full font-semibold text-center text-white">
+                  {title}
+                </Text>
+              </View>
+            </BlurView>
+          </Animated.View>
+        ) : (
+          <View className="items-center justify-center w-full gap-1">
             {iconName ? (
-              <Ionicons name={iconName as any} size={24} color="#ffffff" />
+              <Ionicons name={iconName as any} size={24} color="#4B5563" />
             ) : (
               icon
             )}
-            <Text className="text-[10px] font-semibold text-center text-white">
+            <Text className="text-[10px] text-center font-semibold text-gray-600">
               {title}
             </Text>
           </View>
-        </BlurView>
-      ) : (
-        <View className="items-center justify-center w-full gap-1">
-          {iconName ? (
-            <Ionicons name={iconName as any} size={24} color="#4B5563" />
-          ) : (
-            icon
-          )}
-          <Text className="text-[10px] text-center font-semibold text-gray-600">
-            {title}
-          </Text>
-        </View>
-      )}
+        )}
+      </Animated.View>
     </View>
   );
 };
