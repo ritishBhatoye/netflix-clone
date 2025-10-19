@@ -26,7 +26,9 @@ export default function HomeScreen() {
   return (
     <LinearGradient
          colors={gradientColors}
-         locations={[0.4, 0.3, 0.6, 1]}
+      start={{ x: 0, y: 1.2 }}  // starts lower (20% from top)
+  end={{ x: 0, y: 1 }}      // ends at bottom
+  locations={[0, 0.3, 0.6, 1]}
        >
     <ScrollView>
 

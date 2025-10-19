@@ -80,7 +80,7 @@ const HeroBanner = ({ movie }: HeroBannerProps) => {
           borderBottomRightRadius: 30
         }}
       />
-      <View className="absolute bottom-0 left-0 right-0 px-10 mx-2 pb-6">
+      <View className="absolute bottom-0 left-0 right-0 p-14  ">
         <Text className="text-white text-3xl font-bold mb-2">
           {movie.title}
         </Text>
