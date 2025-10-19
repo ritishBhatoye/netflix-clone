@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 export default function HomeScreen() {
   const { featured, top10, onlyOnNetflix, popular, genres, isLoading } = useHomeContent();
   const [gradientColors, setGradientColors] = useState(getRandomGradient());
-  if (isLoading) return <Text>Loading...</Text>;
   // Change gradient when movie changes or every hour
   useEffect(() => {
     setGradientColors(getRandomGradient());
@@ -22,6 +21,8 @@ export default function HomeScreen() {
 
     return () => clearInterval(interval);
   }, [featured?.data?.[0]]);
+  if (isLoading) return <Text>Loading...</Text>;
+
   return (
     <LinearGradient
          colors={gradientColors}

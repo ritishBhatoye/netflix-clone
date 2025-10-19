@@ -37,7 +37,7 @@ const HeroBanner = ({ movie }: HeroBannerProps) => {
         <Image
           source={{ uri: backdropUri }}
           contentFit="cover"
-          style={{ width: width * 85 / 100, height: 450, margin: 30, borderRadius: 30 }}
+          style={{ width: width * 90 / 100, height: 450, margin: 20,marginTop:20, borderRadius: 30 }}
         />
       ) : (
         <View className="bg-gray-800 w-full h-full" />
@@ -80,7 +80,7 @@ const HeroBanner = ({ movie }: HeroBannerProps) => {
           borderBottomRightRadius: 30
         }}
       />
-      <View className="absolute bottom-0 left-0 right-0 px-12 mx-4 pb-6">
+      <View className="absolute bottom-0 left-0 right-0 px-10 mx-2 pb-6">
         <Text className="text-white text-3xl font-bold mb-2">
           {movie.title}
         </Text>
