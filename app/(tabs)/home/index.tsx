@@ -1,6 +1,7 @@
 import { ScrollView } from 'react-native';
 
-import HomeAppBar from '@/components/global/HomeAppBar/FilterBar';
+import FilterBar from '@/components/global/HomeAppBar/FilterBar';
+import UserBar from '@/components/global/HomeAppBar/UserBar';
 import HeroBanner from '@/components/home/HeroBanner';
 import HomeScreenSkeleton from '@/components/home/HomeScreenSkeleton';
 import MediaRow from '@/components/home/MediaRow';
@@ -8,6 +9,7 @@ import { useHomeContent } from '@/hooks/useHomeContent';
 import { getRandomGradient } from '@/utils/gradientColors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
   const { featured, top10, onlyOnNetflix, popular, genres, isLoading } = useHomeContent();
@@ -33,8 +35,14 @@ export default function HomeScreen() {
       end={{ x: 0, y: 1 }}
       locations={[0, 0.3, 0.6, 1]}
     >
-      <HomeAppBar/>
+      <SafeAreaView edges={['top']}>
+      <UserBar/>
+
+</SafeAreaView>
       <ScrollView>
+    
+
+      <FilterBar/>
 
         <HeroBanner movie={featured.data?.[0]} />
         <MediaRow title="Top 10 Today" data={top10.movies} />
