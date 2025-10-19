@@ -1,5 +1,6 @@
 import { ScrollView } from 'react-native';
 
+import HomeAppBar from '@/components/global/HomeAppBar/FilterBar';
 import HeroBanner from '@/components/home/HeroBanner';
 import HomeScreenSkeleton from '@/components/home/HomeScreenSkeleton';
 import MediaRow from '@/components/home/MediaRow';
@@ -32,6 +33,7 @@ export default function HomeScreen() {
       end={{ x: 0, y: 1 }}
       locations={[0, 0.3, 0.6, 1]}
     >
+      <HomeAppBar/>
       <ScrollView>
 
         <HeroBanner movie={featured.data?.[0]} />
