@@ -27,13 +27,13 @@ const HeroBanner = ({ movie }: HeroBannerProps) => {
     : null;
 
   return (
-    <View style={{ width, height: 500 }} className="relative">
+    <View style={{ width, height: 500 }} className="relative ">
       {/* Backdrop Image */}
       {backdropUri ? (
         <Image
           source={{ uri: backdropUri }}
           contentFit="cover"
-          style={{ width, height: 500 }}
+          style={{ width:width*90/100, height: 500 ,margin:20,borderRadius:30}}
         />
       ) : (
         <View className="bg-gray-800 w-full h-full" />
