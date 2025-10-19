@@ -41,12 +41,9 @@ const HomeAppBar = () => {
   };
 
   return (
-    <View className="px-4">
+    <View className="px-5">
       {/* Header */}
-      <View className="flex flex-row justify-between items-center mb-4">
-        <Text className="text-white font-bold text-2xl">For Ritish</Text>
-        <Ionicons name="search" color="#fff" size={24} />
-      </View>
+    
 
       {/* Filter Bar */}
       <View className="flex flex-row gap-3 mb-4">
