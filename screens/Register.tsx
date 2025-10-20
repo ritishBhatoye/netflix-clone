@@ -164,8 +164,9 @@ export default function RegisterScreen() {
         onPress={onSignUpPress}
         label={loading ? "Creating Account..." : "Sign Up"}
         variant="primary"
-        halfWidth
-        className="mt-5"
+        // halfWidth
+        fullWidth
+        className="mt-5 w-fit"
         disabled={loading || !email || password.length < 8}
       />
 
