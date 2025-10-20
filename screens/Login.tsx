@@ -3,13 +3,8 @@ import Input from "@/components/atoms/Input";
 import { useSignIn } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import {
-  ActivityIndicator,
-  Alert,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function LoginScreen() {
   const { signIn, setActive, isLoaded } = useSignIn();
@@ -31,13 +26,30 @@ export default function LoginScreen() {
 
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
+        Toast.show({
+          type: "success",
+          text1: "Welcome back!",
+          text2: "You've successfully signed in",
+          position: "top",
+          visibilityTime: 2000,
+        });
         router.replace("/(tabs)/home");
       } else {
         console.error(JSON.stringify(signInAttempt, null, 2));
-        Alert.alert("Error", "Sign in failed. Please try again.");
+        Toast.show({
+          type: "error",
+          text1: "Sign in failed",
+          text2: "Please try again",
+          position: "top",
+        });
       }
     } catch (err: any) {
-      Alert.alert("Error", err.errors?.[0]?.message || "Sign in failed");
+      Toast.show({
+        type: "error",
+        text1: "Sign in failed",
+        text2: err.errors?.[0]?.message || "Please check your credentials",
+        position: "top",
+      });
     } finally {
       setLoading(false);
     }

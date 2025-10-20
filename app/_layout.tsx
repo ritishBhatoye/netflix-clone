@@ -3,7 +3,9 @@ import { DarkTheme, ThemeProvider } from "@react-navigation/native";
 import { Stack } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { StatusBar } from "expo-status-bar";
+import Toast from "react-native-toast-message";
 import { Provider } from "react-redux";
+import { toastConfig } from "../config/toastConfig";
 import "../global.css";
 import { store } from "../store";
 
@@ -55,6 +57,7 @@ export default function RootLayout() {
           </ThemeProvider>
         </Provider>
       </ClerkLoaded>
+      <Toast config={toastConfig} />
     </ClerkProvider>
   );
 }

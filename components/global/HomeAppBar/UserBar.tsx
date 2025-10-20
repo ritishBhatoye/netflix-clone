@@ -2,6 +2,7 @@ import { useAuth, useUser } from "@clerk/clerk-expo";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function UserBar() {
   const { user } = useUser();
@@ -16,6 +17,13 @@ export default function UserBar() {
         style: "destructive",
         onPress: async () => {
           await signOut();
+          Toast.show({
+            type: "success",
+            text1: "Signed out",
+            text2: "See you next time!",
+            position: "top",
+            visibilityTime: 2000,
+          });
           router.replace("/(auth)/login");
         },
       },

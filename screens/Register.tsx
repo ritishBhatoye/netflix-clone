@@ -5,12 +5,12 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 export default function RegisterScreen() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -33,9 +33,21 @@ export default function RegisterScreen() {
       });
 
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      Toast.show({
+        type: "info",
+        text1: "Check your email",
+        text2: `We sent a verification code to ${email}`,
+        position: "top",
+        visibilityTime: 3000,
+      });
       setPendingVerification(true);
     } catch (err: any) {
-      Alert.alert("Error", err.errors?.[0]?.message || "Sign up failed");
+      Toast.show({
+        type: "error",
+        text1: "Sign up failed",
+        text2: err.errors?.[0]?.message || "Please try again",
+        position: "top",
+      });
     } finally {
       setLoading(false);
     }
@@ -52,13 +64,30 @@ export default function RegisterScreen() {
 
       if (completeSignUp.status === "complete") {
         await setActive({ session: completeSignUp.createdSessionId });
+        Toast.show({
+          type: "success",
+          text1: "Account created!",
+          text2: "Welcome to Netflix",
+          position: "top",
+          visibilityTime: 2000,
+        });
         router.replace("/(tabs)/home");
       } else {
         console.error(JSON.stringify(completeSignUp, null, 2));
-        Alert.alert("Error", "Verification failed. Please try again.");
+        Toast.show({
+          type: "error",
+          text1: "Verification failed",
+          text2: "Please try again",
+          position: "top",
+        });
       }
     } catch (err: any) {
-      Alert.alert("Error", err.errors?.[0]?.message || "Verification failed");
+      Toast.show({
+        type: "error",
+        text1: "Verification failed",
+        text2: err.errors?.[0]?.message || "Invalid code",
+        position: "top",
+      });
     } finally {
       setLoading(false);
     }
