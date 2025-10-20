@@ -99,7 +99,7 @@ const Input: React.FC<InputWithLabelProps> = ({
       )}
       <View className={clsx(inputStyles({ variant, size }), inputClassName)}>
         <TextInput
-          className={clsx("flex-1 py-1 text-swiggy-text")}
+          className={clsx("flex-1 py-1 text-swiggy-text text-white")}
           value={value}
           onChangeText={handleTextChange}
           placeholder={placeholder}

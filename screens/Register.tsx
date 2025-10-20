@@ -106,7 +106,7 @@ export default function RegisterScreen() {
           value={code}
           onValueChange={setCode}
           keyboardType="number-pad"
-          inputClassName="bg-tertiary-400/60 text-center text-2xl tracking-widest"
+          inputClassName="bg-tertiary-400/20 text-center text-2xl tracking-widest"
           variant="borderless"
         />
 
@@ -141,7 +141,7 @@ export default function RegisterScreen() {
 
       <Input
         placeholder="Email address"
-        inputClassName="bg-tertiary-400/60"
+        inputClassName="bg-tertiary-400/20"
         variant="borderless"
         value={email}
         onValueChange={setEmail}

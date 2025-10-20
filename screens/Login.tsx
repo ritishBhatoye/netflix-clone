@@ -61,7 +61,7 @@ export default function LoginScreen() {
 
       <Input
         placeholder="Email or phone number"
-        inputClassName="bg-tertiary-400/20"
+        inputClassName="bg-tertiary-400/20 text-white"
         variant="borderless"
         value={email}
         onValueChange={setEmail}
@@ -71,7 +71,7 @@ export default function LoginScreen() {
 
       <Input
         placeholder="Password"
-        inputClassName="bg-tertiary-400/20"
+        inputClassName="bg-tertiary-400/20 text-white"
         value={password}
         onValueChange={setPassword}
         isPassword={true}
