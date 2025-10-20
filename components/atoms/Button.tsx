@@ -15,6 +15,7 @@ interface ButtonProps {
   halfWidth?: boolean;
   className?: string;
   textClassName?: string;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -27,6 +28,7 @@ const Button: React.FC<ButtonProps> = ({
   halfWidth = false,
   className = "",
   textClassName = "",
+  disabled = false,
 }) => {
   const getButtonStyle = (): string => {
     switch (variant) {
@@ -79,6 +81,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <TouchableOpacity
       onPress={onPress}
+      disabled={disabled}
       className={clsx(
         "rounded-md items-center justify-center flex-row", // flex-row to allow icon+text side by side
         getButtonStyle(),
@@ -86,6 +89,7 @@ const Button: React.FC<ButtonProps> = ({
         {
           "w-full": fullWidth,
           "w-1/2": halfWidth,
+          "opacity-50": disabled,
         },
         className
       )}
