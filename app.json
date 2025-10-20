@@ -6,6 +6,9 @@
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "netflixclone",
+    "extra": {
+      "clerkPublishableKey": "EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY"
+    },
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "jsEngine": "hermes",

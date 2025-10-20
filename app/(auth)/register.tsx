@@ -1,5 +1,10 @@
-import { View } from "react-native";
+import RegisterScreen from "@/screens/Register";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Register() {
-  return <View></View>;
+  return (
+    <SafeAreaView className="flex-1">
+      <RegisterScreen />
+    </SafeAreaView>
+  );
 }
