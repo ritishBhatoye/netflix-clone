@@ -1,5 +1,6 @@
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
+import OtpInput from "@/components/atoms/OtpInput";
 import { useSignUp } from "@clerk/clerk-expo";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -101,14 +102,7 @@ export default function RegisterScreen() {
           We sent a verification code to {email}
         </Text>
 
-        <Input
-          placeholder="Enter verification code"
-          value={code}
-          onValueChange={setCode}
-          keyboardType="number-pad"
-          inputClassName="bg-tertiary-400/20 text-center text-2xl tracking-widest"
-          variant="borderless"
-        />
+        <OtpInput value={code} onChange={setCode} className="mt-2" />
 
         <Button
           onPress={onVerifyPress}
