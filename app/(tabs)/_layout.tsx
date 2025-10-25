@@ -15,8 +15,12 @@ interface TabBarIconProps {
 
 const TabBarIcon = ({ focused, iconName, title, icon }: TabBarIconProps) => {
   const scaleAnim = React.useRef(new Animated.Value(focused ? 1 : 0.9)).current;
-  const opacityAnim = React.useRef(new Animated.Value(focused ? 1 : 0.6)).current;
-  const blurOpacityAnim = React.useRef(new Animated.Value(focused ? 1 : 0)).current;
+  const opacityAnim = React.useRef(
+    new Animated.Value(focused ? 1 : 0.6)
+  ).current;
+  const blurOpacityAnim = React.useRef(
+    new Animated.Value(focused ? 1 : 0)
+  ).current;
 
   React.useEffect(() => {
     Animated.parallel([
@@ -80,11 +84,11 @@ const TabBarIcon = ({ focused, iconName, title, icon }: TabBarIconProps) => {
         ) : (
           <View className="items-center justify-center w-full gap-1">
             {iconName ? (
-              <Ionicons name={iconName as any} size={24} color="#4B5563" />
+              <Ionicons name={iconName as any} size={24} color="#f3f4f6" />
             ) : (
               icon
             )}
-            <Text className="text-[10px] text-center font-semibold text-gray-600">
+            <Text className="text-[10px] text-center font-semibold text-gray-100">
               {title}
             </Text>
           </View>
