@@ -1,33 +1,21 @@
-import { useSupabaseUser } from "@/hooks/useSupabase";
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { ActivityIndicator, Image, Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 const ProfileAppBar = () => {
-  const { user, profile, loading } = useSupabaseUser();
-
-  if (loading) {
-    return (
-      <View className="flex flex-row items-center">
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }
-
   return (
-    <View className="flex flex-row items-center gap-3">
-      {profile?.avatar_url && (
-        <Image
-          source={{ uri: profile.avatar_url }}
-          className="w-10 h-10 rounded-full"
+    <TouchableOpacity className="flex flex-row items-center justify-between">
+      <Text className="text-2xl font-semibold">My Netflix </Text>
+      <View className="flex flex-row items-center gap-2">
+        <Ionicons name="tv-outline" color={"#ffffff"} size={20} />
+        <Ionicons name="search-outline" color={"#ffffff"} size={20} />
+        <Ionicons
+          name="ellipsis-vertical-outline"
+          color={"#ffffff"}
+          size={20}
         />
-      )}
-      <View>
-        <Text className="text-lg font-semibold">
-          {profile?.username || user?.email?.split("@")[0] || "User"}
-        </Text>
-        <Text className="text-sm text-gray-500">{user?.email}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -67,7 +67,11 @@ interface FeaturedMovieProps {
   popularity: number;
   genre_ids: number[];
 }
-
+interface TileCtaType {
+  trailingIcon: any;
+  title: string;
+  handleOnPress: () => void;
+}
 interface TVShowProps {
   id: number;
   name: string;
