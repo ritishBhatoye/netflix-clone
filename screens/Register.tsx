@@ -1,7 +1,6 @@
 import Button from "@/components/atoms/Button";
 import Input from "@/components/atoms/Input";
-import OtpInput from "@/components/atoms/OtpInput";
-import { useSignUp } from "@clerk/clerk-expo";
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
@@ -9,122 +8,63 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
 } from "react-native";
 import Toast from "react-native-toast-message";
 
 export default function RegisterScreen() {
-  const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [pendingVerification, setPendingVerification] = useState(false);
-  const [code, setCode] = useState("");
+  const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
 
   const onSignUpPress = async () => {
-    if (!isLoaded) return;
+    if (!email || !password) {
+      Toast.show({
+        type: "error",
+        text1: "Missing fields",
+        text2: "Please fill in all fields",
+        position: "top",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      await signUp.create({
-        emailAddress: email,
+      const { data, error } = await supabase.auth.signUp({
+        email,
         password,
+        options: {
+          data: {
+            username: username || email.split("@")[0],
+          },
+        },
       });
 
-      await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
+      if (error) throw error;
+
       Toast.show({
-        type: "info",
-        text1: "Check your email",
-        text2: `We sent a verification code to ${email}`,
+        type: "success",
+        text1: "Account created!",
+        text2: "Welcome to Netflix",
         position: "top",
-        visibilityTime: 3000,
+        visibilityTime: 2000,
       });
-      setPendingVerification(true);
-    } catch (err: any) {
+
+      router.replace("/(tabs)/home");
+    } catch (error: any) {
+      console.error("Sign up error:", error);
       Toast.show({
         type: "error",
         text1: "Sign up failed",
-        text2: err.errors?.[0]?.message || "Please try again",
+        text2: error.message || "Please try again",
         position: "top",
       });
     } finally {
       setLoading(false);
     }
   };
-
-  const onVerifyPress = async () => {
-    if (!isLoaded) return;
-
-    setLoading(true);
-    try {
-      const completeSignUp = await signUp.attemptEmailAddressVerification({
-        code,
-      });
-
-      if (completeSignUp.status === "complete") {
-        await setActive({ session: completeSignUp.createdSessionId });
-        Toast.show({
-          type: "success",
-          text1: "Account created!",
-          text2: "Welcome to Netflix",
-          position: "top",
-          visibilityTime: 2000,
-        });
-        router.replace("/(tabs)/home");
-      } else {
-        console.error(JSON.stringify(completeSignUp, null, 2));
-        Toast.show({
-          type: "error",
-          text1: "Verification failed",
-          text2: "Please try again",
-          position: "top",
-        });
-      }
-    } catch (err: any) {
-      Toast.show({
-        type: "error",
-        text1: "Verification failed",
-        text2: err.errors?.[0]?.message || "Invalid code",
-        position: "top",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (pendingVerification) {
-    return (
-      <View className="h-full justify-center items-center gap-4 w-11/12 mx-auto">
-        <Text className="text-white text-3xl font-bold mb-4">Verify Email</Text>
-        <Text className="text-white/70 text-center mb-4">
-          We sent a verification code to {email}
-        </Text>
-
-        <OtpInput value={code} onChange={setCode} className="mt-2" />
-
-        <Button
-          onPress={onVerifyPress}
-          label={loading ? "Verifying..." : "Verify Email"}
-          variant="primary"
-          halfWidth
-          className="mt-5"
-          disabled={loading || !code}
-        />
-
-        {loading && (
-          <ActivityIndicator size="small" color="#E50914" className="mt-2" />
-        )}
-
-        <TouchableOpacity onPress={() => setPendingVerification(false)}>
-          <Text className="text-tertiary-200 text-sm mt-4">
-            Wrong email? Go back
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
 
   return (
     <ScrollView
@@ -144,24 +84,32 @@ export default function RegisterScreen() {
       />
 
       <Input
-        placeholder="Password (min 8 characters)"
+        placeholder="Username (optional)"
+        inputClassName="bg-tertiary-400/20"
+        variant="borderless"
+        value={username}
+        onValueChange={setUsername}
+        autoCapitalize="none"
+      />
+
+      <Input
+        placeholder="Password (min 6 characters)"
         value={password}
         onValueChange={setPassword}
         isPassword={true}
       />
 
       <Text className="text-white/50 text-xs text-center px-4 mt-2">
-        Password must be at least 8 characters long
+        Password must be at least 6 characters long
       </Text>
 
       <Button
         onPress={onSignUpPress}
         label={loading ? "Creating Account..." : "Sign Up"}
         variant="primary"
-        // halfWidth
         fullWidth
         className="mt-5 w-fit"
-        disabled={loading || !email || password.length < 8}
+        disabled={loading || !email || password.length < 6}
       />
 
       {loading && (

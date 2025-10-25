@@ -1,12 +1,12 @@
-import { useAuth, useUser } from "@clerk/clerk-expo";
+import { useSupabaseUser } from "@/hooks/useSupabase";
+import { supabase } from "@/lib/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import { Alert, Text, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 
 export default function UserBar() {
-  const { user } = useUser();
-  const { signOut } = useAuth();
+  const { user, profile } = useSupabaseUser();
   const router = useRouter();
 
   const handleSignOut = () => {
@@ -16,7 +16,7 @@ export default function UserBar() {
         text: "Sign Out",
         style: "destructive",
         onPress: async () => {
-          await signOut();
+          await supabase.auth.signOut();
           Toast.show({
             type: "success",
             text1: "Signed out",
@@ -30,14 +30,11 @@ export default function UserBar() {
     ]);
   };
 
-  const firstName =
-    user?.firstName ||
-    user?.emailAddresses?.[0]?.emailAddress?.split("@")[0] ||
-    "User";
+  const displayName = profile?.username || user?.email?.split("@")[0] || "User";
 
   return (
     <View className="flex flex-row justify-between items-center mb-4 px-5">
-      <Text className="text-white font-bold text-2xl">For {firstName}</Text>
+      <Text className="text-white font-bold text-2xl">For {displayName}</Text>
       <View className="flex-row gap-4 flex items-center">
         <TouchableOpacity>
           <Ionicons name="tv-outline" size={24} color="#fff" />

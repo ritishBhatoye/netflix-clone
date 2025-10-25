@@ -1,13 +1,11 @@
-import Button from "@/components/atoms/Button";
-import Input from "@/components/atoms/Input";
-import { useSignIn } from "@clerk/clerk-expo";
+import { default as Button, default as Input } from "@/components/atoms/Input";
+import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, Text, TouchableOpacity, View } from "react-native";
 import Toast from "react-native-toast-message";
 
 export default function LoginScreen() {
-  const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
 
   const [email, setEmail] = useState("");
@@ -15,39 +13,40 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
 
   const onSignInPress = async () => {
-    if (!isLoaded) return;
+    if (!email || !password) {
+      Toast.show({
+        type: "error",
+        text1: "Missing fields",
+        text2: "Please fill in all fields",
+        position: "top",
+      });
+      return;
+    }
 
     setLoading(true);
     try {
-      const signInAttempt = await signIn.create({
-        identifier: email,
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
         password,
       });
 
-      if (signInAttempt.status === "complete") {
-        await setActive({ session: signInAttempt.createdSessionId });
-        Toast.show({
-          type: "success",
-          text1: "Welcome back!",
-          text2: "You've successfully signed in",
-          position: "top",
-          visibilityTime: 2000,
-        });
-        router.replace("/(tabs)/home");
-      } else {
-        console.error(JSON.stringify(signInAttempt, null, 2));
-        Toast.show({
-          type: "error",
-          text1: "Sign in failed",
-          text2: "Please try again",
-          position: "top",
-        });
-      }
-    } catch (err: any) {
+      if (error) throw error;
+
+      Toast.show({
+        type: "success",
+        text1: "Welcome back!",
+        text2: "You've successfully signed in",
+        position: "top",
+        visibilityTime: 2000,
+      });
+
+      router.replace("/(tabs)/home");
+    } catch (error: any) {
+      console.error("Sign in error:", error);
       Toast.show({
         type: "error",
         text1: "Sign in failed",
-        text2: err.errors?.[0]?.message || "Please check your credentials",
+        text2: error.message || "Please check your credentials",
         position: "top",
       });
     } finally {
@@ -104,7 +103,7 @@ export default function LoginScreen() {
       </TouchableOpacity>
 
       <Text className="text-tertiary-200 text-xs text-center py-5 px-4">
-        Sign in is protected by Google reCAPTCHA to ensure you are not a bot.{" "}
+        Sign in is protected by reCAPTCHA to ensure you are not a bot.{" "}
         <Text className="font-semibold">Learn More</Text>
       </Text>
     </View>

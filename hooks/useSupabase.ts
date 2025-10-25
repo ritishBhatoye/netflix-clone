@@ -1,60 +1,75 @@
-import { useSyncUserMutation } from "@/services/supabaseApi";
-import { getUserByClerkId, User } from "@/services/supabaseService";
-import { useUser } from "@clerk/clerk-expo";
+import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
 
+export interface Profile {
+  id: string;
+  email: string;
+  username?: string;
+  avatar_url?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 /**
- * Hook to sync Clerk user with Supabase and get user ID
- * This is the main hook you'll use to get the current user's Supabase ID
+ * Hook to get current authenticated user from Supabase
  *
  * Usage:
- * const { userId, supabaseUser, loading } = useSupabaseUser();
+ * const { user, profile, userId, loading } = useSupabaseUser();
  */
 export const useSupabaseUser = () => {
-  const { user: clerkUser } = useUser();
-  const [supabaseUser, setSupabaseUser] = useState<User | null>(null);
+  const [user, setUser] = useState<any>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [syncUser] = useSyncUserMutation();
 
   useEffect(() => {
-    const sync = async () => {
-      if (!clerkUser) {
-        setSupabaseUser(null);
-        setLoading(false);
-        return;
-      }
-
-      try {
-        setLoading(true);
-
-        // Try to get existing user first
-        try {
-          const existingUser = await getUserByClerkId(clerkUser.id);
-          setSupabaseUser(existingUser);
-        } catch {
-          // User doesn't exist, sync with Supabase
-          const result = await syncUser({
-            clerkId: clerkUser.id,
-            email: clerkUser.primaryEmailAddress?.emailAddress || "",
-            username: clerkUser.username || undefined,
-            avatarUrl: clerkUser.imageUrl || undefined,
-          }).unwrap();
-
-          setSupabaseUser(result);
-        }
-      } catch (error) {
-        console.error("Error syncing user:", error);
-      } finally {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        loadProfile(session.user.id);
+      } else {
         setLoading(false);
       }
-    };
+    });
 
-    sync();
-  }, [clerkUser?.id]);
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) {
+        loadProfile(session.user.id);
+      } else {
+        setProfile(null);
+        setLoading(false);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const loadProfile = async (userId: string) => {
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("id", userId)
+        .single();
+
+      if (error) throw error;
+      setProfile(data);
+    } catch (error) {
+      console.error("Error loading profile:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return {
-    supabaseUser,
-    userId: supabaseUser?.id,
+    user,
+    profile,
+    userId: user?.id,
     loading,
+    isAuthenticated: !!user,
   };
 };

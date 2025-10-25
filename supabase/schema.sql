@@ -7,11 +7,11 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- =============================================
 -- USERS TABLE
--- Synced with Clerk authentication
+-- Uses Supabase Auth (auth.users)
+-- This is a public profile table that references auth.users
 -- =============================================
-CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  clerk_id TEXT UNIQUE NOT NULL,
+CREATE TABLE public.profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
   email TEXT UNIQUE NOT NULL,
   username TEXT,
   avatar_url TEXT,
@@ -20,8 +20,28 @@ CREATE TABLE users (
 );
 
 -- Index for faster lookups
-CREATE INDEX idx_users_clerk_id ON users(clerk_id);
-CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_profiles_email ON public.profiles(email);
+
+-- Function to create profile on signup
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO public.profiles (id, email, username, avatar_url)
+  VALUES (
+    NEW.id,
+    NEW.email,
+    NEW.raw_user_meta_data->>'username',
+    NEW.raw_user_meta_data->>'avatar_url'
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Trigger to auto-create profile
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW
+  EXECUTE FUNCTION public.handle_new_user();
 
 -- =============================================
 -- FAVORITES TABLE
@@ -29,7 +49,7 @@ CREATE INDEX idx_users_email ON users(email);
 -- =============================================
 CREATE TABLE favorites (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   movie_id INTEGER NOT NULL,
   movie_type TEXT NOT NULL CHECK (movie_type IN ('movie', 'tv')),
   movie_title TEXT,
@@ -48,7 +68,7 @@ CREATE INDEX idx_favorites_movie_id ON favorites(movie_id);
 -- =============================================
 CREATE TABLE watchlist (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   movie_id INTEGER NOT NULL,
   movie_type TEXT NOT NULL CHECK (movie_type IN ('movie', 'tv')),
   movie_title TEXT,
@@ -67,7 +87,7 @@ CREATE INDEX idx_watchlist_movie_id ON watchlist(movie_id);
 -- =============================================
 CREATE TABLE ratings (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   movie_id INTEGER NOT NULL,
   movie_type TEXT NOT NULL CHECK (movie_type IN ('movie', 'tv')),
   rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
@@ -86,7 +106,7 @@ CREATE INDEX idx_ratings_movie_id ON ratings(movie_id);
 -- =============================================
 CREATE TABLE comments (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   movie_id INTEGER NOT NULL,
   movie_type TEXT NOT NULL CHECK (movie_type IN ('movie', 'tv')),
   comment TEXT NOT NULL,
@@ -105,7 +125,7 @@ CREATE INDEX idx_comments_created_at ON comments(created_at DESC);
 -- =============================================
 CREATE TABLE watch_history (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID REFERENCES public.profiles(id) ON DELETE CASCADE,
   movie_id INTEGER NOT NULL,
   movie_type TEXT NOT NULL CHECK (movie_type IN ('movie', 'tv')),
   movie_title TEXT,
@@ -125,64 +145,64 @@ CREATE INDEX idx_watch_history_watched_at ON watch_history(watched_at DESC);
 -- =============================================
 
 -- Enable RLS on all tables
-ALTER TABLE users ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE favorites ENABLE ROW LEVEL SECURITY;
 ALTER TABLE watchlist ENABLE ROW LEVEL SECURITY;
 ALTER TABLE ratings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE watch_history ENABLE ROW LEVEL SECURITY;
 
--- Users table policies
+-- Profiles table policies
 CREATE POLICY "Users can view their own profile"
-  ON users FOR SELECT
-  USING (clerk_id = auth.jwt() ->> 'sub');
+  ON public.profiles FOR SELECT
+  USING (auth.uid() = id);
 
 CREATE POLICY "Users can update their own profile"
-  ON users FOR UPDATE
-  USING (clerk_id = auth.jwt() ->> 'sub');
+  ON public.profiles FOR UPDATE
+  USING (auth.uid() = id);
 
 -- Favorites policies
 CREATE POLICY "Users can view their own favorites"
   ON favorites FOR SELECT
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert their own favorites"
   ON favorites FOR INSERT
-  WITH CHECK (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can delete their own favorites"
   ON favorites FOR DELETE
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 -- Watchlist policies
 CREATE POLICY "Users can view their own watchlist"
   ON watchlist FOR SELECT
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert to their own watchlist"
   ON watchlist FOR INSERT
-  WITH CHECK (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can delete from their own watchlist"
   ON watchlist FOR DELETE
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 -- Ratings policies
 CREATE POLICY "Users can view their own ratings"
   ON ratings FOR SELECT
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert their own ratings"
   ON ratings FOR INSERT
-  WITH CHECK (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can update their own ratings"
   ON ratings FOR UPDATE
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can delete their own ratings"
   ON ratings FOR DELETE
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 -- Comments policies (public read, authenticated write)
 CREATE POLICY "Anyone can view comments"
@@ -191,28 +211,28 @@ CREATE POLICY "Anyone can view comments"
 
 CREATE POLICY "Users can insert their own comments"
   ON comments FOR INSERT
-  WITH CHECK (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can update their own comments"
   ON comments FOR UPDATE
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can delete their own comments"
   ON comments FOR DELETE
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 -- Watch history policies
 CREATE POLICY "Users can view their own watch history"
   ON watch_history FOR SELECT
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 CREATE POLICY "Users can insert to their own watch history"
   ON watch_history FOR INSERT
-  WITH CHECK (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  WITH CHECK (auth.uid() = user_id);
 
 CREATE POLICY "Users can update their own watch history"
   ON watch_history FOR UPDATE
-  USING (user_id IN (SELECT id FROM users WHERE clerk_id = auth.jwt() ->> 'sub'));
+  USING (auth.uid() = user_id);
 
 -- =============================================
 -- FUNCTIONS
@@ -228,8 +248,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- Triggers for updated_at
-CREATE TRIGGER update_users_updated_at
-  BEFORE UPDATE ON users
+CREATE TRIGGER update_profiles_updated_at
+  BEFORE UPDATE ON public.profiles
   FOR EACH ROW
   EXECUTE FUNCTION update_updated_at_column();
 
