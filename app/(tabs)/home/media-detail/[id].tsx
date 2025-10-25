@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
 
-import { SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import mediaDetailList from "@/assets/data/mediaDetailedList.json";
 import MediaDetailScreen from "@/components/global/MediaDetailScreen";
