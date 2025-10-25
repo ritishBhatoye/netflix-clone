@@ -1,4 +1,5 @@
-import { default as Button, default as Input } from "@/components/atoms/Input";
+import Button from "@/components/atoms/Button";
+import { default as Input } from "@/components/atoms/Input";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "expo-router";
 import { useState } from "react";
@@ -30,7 +31,20 @@ export default function LoginScreen() {
         password,
       });
 
-      if (error) throw error;
+      if (error) {
+        // Handle specific error cases
+        if (error.message.includes("Email not confirmed")) {
+          Toast.show({
+            type: "error",
+            text1: "Email not confirmed",
+            text2: "Please check your email and confirm your account",
+            position: "top",
+            visibilityTime: 4000,
+          });
+          return;
+        }
+        throw error;
+      }
 
       Toast.show({
         type: "success",

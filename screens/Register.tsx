@@ -39,10 +39,23 @@ export default function RegisterScreen() {
           data: {
             username: username || email.split("@")[0],
           },
+          emailRedirectTo: undefined, // Disable email confirmation redirect
         },
       });
 
       if (error) throw error;
+
+      // Check if email confirmation is required
+      if (data?.user && !data.session) {
+        Toast.show({
+          type: "info",
+          text1: "Check your email",
+          text2: "Please confirm your email to continue",
+          position: "top",
+          visibilityTime: 4000,
+        });
+        return;
+      }
 
       Toast.show({
         type: "success",
