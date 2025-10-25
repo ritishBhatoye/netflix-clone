@@ -1,4 +1,4 @@
-import ProfileHeader from "@/components/profile/ProfileHeader";
+import SettingTopBar from "@/components/profile/SettingTopBar";
 import { Stack } from "expo-router";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -11,7 +11,7 @@ const SettingLayout = () => {
         options={{
           header: () => (
             <SafeAreaView>
-              <ProfileHeader />
+              <SettingTopBar />
             </SafeAreaView>
           ),
         }}

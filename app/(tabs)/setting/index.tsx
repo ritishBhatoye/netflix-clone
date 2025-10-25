@@ -1,5 +1,6 @@
 import DownloadItem from "@/components/profile/DownloadItem";
 import NotificationCard from "@/components/profile/NotificationCard";
+import ProfileHeader from "@/components/profile/ProfileHeader";
 import SectionHeader from "@/components/profile/SectionHeader";
 import React from "react";
 import { Image, ScrollView, View } from "react-native";
@@ -61,6 +62,8 @@ const Setting = () => {
   return (
     <ScrollView className="flex-1 bg-black">
       <View className="px-4">
+        <ProfileHeader />
+
         {/* Notifications Section */}
         <View className="mb-6">
           <SectionHeader
