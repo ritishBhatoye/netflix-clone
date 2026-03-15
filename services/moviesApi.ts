@@ -14,7 +14,7 @@ export const moviesApi = createApi({
         response.results,
     }),
 
-    // Trending TV Shows
+    // Trending TV Show
     getTrendingTVShows: builder.query<TVShowProps[], void>({
       query: () => `/trending/tv/day?api_key=${API_KEY}`,
       transformResponse: (response: TMDBResponse<TVShowProps>) =>
