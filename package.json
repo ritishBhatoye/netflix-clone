@@ -9,7 +9,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -55,6 +56,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@playwright/test": "^1.58.2",
     "@types/react": "~19.1.10",
     "babel-plugin-dotenv": "^0.1.1",
     "eslint": "^9.25.0",
